@@ -1,5 +1,6 @@
 const JSON_PATH = "../blog_posts.json";
 
+// Get required DOM elements
 const emojiPicker = document.querySelector('emoji-picker');
 const emojiButton = document.getElementById("emojiButton");
 const bodyText = document.getElementById("message");
@@ -17,12 +18,57 @@ const loadBtnArea = document.getElementById("loadBtn");
 const newPostArea = document.getElementById("newPost");
 const saveBtnArea = document.getElementById("saveBtn");
 
-
+// Initialise variables
 let existingTagList = [];
 let existingPostsJSON;
 let postCounter = 0;
 
+// function loadData() {
+//   // Show upload prompt
+//   loadInput.click()
 
+// }
+
+// Auto-Load Data
+async function autoLoadData() {
+  console.log("Loading data on startup...")
+
+  // Url for the request 
+  let url = 'http://localhost:8080/data';
+
+  // Making our request 
+  fetch(url, { method: 'GET' })
+    .then(Result => Result.json())
+    .then(jsonData => {
+      // Printing json response 
+      console.log(jsonData);
+      existingPostsJSON = jsonData;
+    })
+    .catch(errorMsg => { console.log(errorMsg); });
+
+}
+
+function saveData() {
+  console.log("Saving new post data...")
+
+  // Url for the request 
+  let url = 'http://localhost:8080/data';
+
+  // Making our request 
+  fetch(url, { method: 'POST' })
+    .then(response => {
+      if (response.ok) {
+        console.log("Successful POST")
+      }
+      else {
+        console.log("failed to POST")
+      }
+    })
+    .catch(errorMsg => { console.log(errorMsg); });
+}
+
+
+// ##### POST CREATION FUNCTIONS #####
 
 // Add new tag to current new post
 function addTag() {
@@ -65,7 +111,70 @@ function addTag() {
   }
 }
 
-// Add new post to existing post data
+// emoji picker helper class
+function emojiToggleHandler() {
+  emojiPicker.classList.toggle("emoji");
+}
+
+// Toggle visibility of emoji picker
+function toggle() {
+  if (emojiPicker.style.display === "none") {
+    emojiPicker.style.display = "block";
+  } else {
+    emojiPicker.style.display = "none";
+  }
+}
+
+// Update emoji button value and toggle picker visibility
+emojiPicker.addEventListener('emoji-click', event => {
+  let emoji = event.detail
+
+  // Update emoji button to match the picked emoji
+  emojiButton.textContent = emoji.unicode;
+  // Hide the emoji picker
+  emojiPicker.classList.toggle("emoji");
+});
+
+// Get value of user loaded data JSON
+// loadInput.addEventListener('change', function (event) {
+
+//   // Get selected file
+//   const file = event.target.files[0];
+//   // Ensure file not empty
+//   if (file) {
+//     newPostArea.style.display = "block"
+//     saveBtnArea.style.display = "block"
+
+//     // Initialise file reader
+//     const reader = new FileReader();
+
+//     // Add onload event for reading file data
+//     reader.onload = function (e) {
+//       console.log(e.target.result)
+
+//       // Convert string data to JSON
+//       let data = JSON.parse(e.target.result)
+//       console.log(data)
+
+//       // Set global data variable to current data
+//       existingPostsJSON = data;
+//     };
+//     // Read file contents as plain text
+//     reader.readAsText(file);
+//   }
+// })
+
+// Control display of image preview
+imageURL.addEventListener('change', event => {
+  if (imageURL.value != "") {
+    previewLbl.style.display = "block"
+  } else {
+    previewLbl.style.display = "none"
+  }
+  imgPreview.src = imageURL.value
+})
+
+// Add new post to currently loaded post data
 function addPost() {
   if (bodyText.value == "") {
     createError.textContent = "ERROR: Must contain body content";
@@ -118,38 +227,14 @@ function addPost() {
     previewLbl.style.display = "none"
     imgPreview.src = ""
   }
-
-
 }
 
-function initialiseData() {
-  console.log("Initialising data...")
-  fetch(JSON_PATH)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      return response.json();
-    })
-    .then(data => {
-      //  Update existing post data
-      console.log(data)
-      existingPostsJSON = data;
-    })
-
-}
-
-function loadData() {
-  // Show upload prompt
-  loadInput.click()
-
-}
-
+// Update currently loaded file with a new blog post
 function updateData() {
   // Show download prompt
   let filename = "blog_posts.json";
-  download(filename, existingPostsJSON);
+  // download(filename, existingPostsJSON);
+  saveData();
 
   // Clear fields
   bodyText.value = ""
@@ -162,89 +247,28 @@ function updateData() {
   imgPreview.src = ""
 }
 
-// Prompt user download 
-function download(file, text) {
-  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(existingPostsJSON, null, 2));
-  //creating an invisible element
+// Prompt user download of updated data
+// function download(file, text) {
+//   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(existingPostsJSON, null, 2));
+//   //creating an invisible element
 
-  let element = document.createElement('a');
-  element.setAttribute('href', dataStr);
-  element.setAttribute('download', file);
-  document.body.appendChild(element);
-  element.click();
+//   let element = document.createElement('a');
+//   element.setAttribute('href', dataStr);
+//   element.setAttribute('download', file);
+//   document.body.appendChild(element);
+//   element.click();
 
-  document.body.removeChild(element);
-}
-
-// emoji picker helper class
-function emojiToggleHandler() {
-  emojiPicker.classList.toggle("emoji");
-}
-
-// Toggle visibility of emoji picker
-function toggle() {
-  if (emojiPicker.style.display === "none") {
-    emojiPicker.style.display = "block";
-  } else {
-    emojiPicker.style.display = "none";
-  }
-}
-
-// Get value of user loaded data
-loadInput.addEventListener('change', function (event) {
-
-  // Get selected file
-  const file = event.target.files[0];
-  // Ensure file not empty
-  if (file) {
-    newPostArea.style.display = "block"
-    saveBtnArea.style.display = "block"
-
-    // Initialise file reader
-    const reader = new FileReader();
-
-    // Add onload event for reading file data
-    reader.onload = function (e) {
-      console.log(e.target.result)
-
-      // Convert string data to JSON
-      let data = JSON.parse(e.target.result)
-      console.log(data)
-
-      // Set global data variable to current data
-      existingPostsJSON = data;
-    };
-    // Read file contents as plain text
-    reader.readAsText(file);
-  }
-})
+//   document.body.removeChild(element);
+// }
 
 
-// Update emoji button value and toggle picker visibility
-emojiPicker.addEventListener('emoji-click', event => {
-  let emoji = event.detail
 
-  // Update emoji button to match the picked emoji
-  emojiButton.textContent = emoji.unicode;
-  // Hide the emoji picker
-  emojiPicker.classList.toggle("emoji");
-});
-
-// Control display of image preview
-imageURL.addEventListener('change', event => {
-  if (imageURL.value != "") {
-    previewLbl.style.display = "block"
-  } else {
-    previewLbl.style.display = "none"
-  }
-  imgPreview.src = imageURL.value
-})
 
 // ========== MAIN ==========
 
 function main() {
   console.log("Hello World")
-  // initialiseData()
+  autoLoadData()
 }
 
 main();
