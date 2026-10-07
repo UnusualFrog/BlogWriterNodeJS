@@ -1,0 +1,110 @@
+<html>
+<!-- Source: formbold.com/templates/chatbox-form -->
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="formbold-main-wrapper">
+
+        <div class="w-full">
+
+            <!-- Form -->
+            <div class="formbold-form-wrapper">
+                <!-- Header -->
+                <div class="formbold-form-header">
+                    <h3>Frog Paradise - New Blog Post</h3>
+                </div>
+
+                <!-- Form Fields -->
+                <div class="formbold-chatbox-form">
+                    <!-- Load Existing Posts -->
+                    <div id="loadBtn">
+                        <div class="formbold-mb-5">
+                            <label for="name" class="formbold-form-label"> Load Blog Data </label>
+                            <button id="loadPosts" class="formbold-btn" onclick="loadData()">Load Blog Posts</button>
+                            <input id="file-input" type="file" name="name" style="display: none;" />
+                        </div>
+                    </div>
+
+                    <div id="newPost" style="display: none">
+                        <!-- Title -->
+                        <div class="formbold-mb-5">
+                            <label for="name" class="formbold-form-label"> Title </label>
+                            <input type="text" name="name" id="title" placeholder="Enter the title..."
+                                class="tag-text-area" />
+                        </div>
+
+                        <!-- Post Body -->
+                        <div class="formbold-mb-5">
+                            <label for="message" class="formbold-form-label"> Blog Post Body </label>
+                            <textarea rows="32" name="message" id="message" placeholder="Type your thoughts..."
+                                class="formbold-form-input"></textarea>
+                        </div>
+
+                        <!-- Image Content -->
+                        <div class="formbold-mb-5">
+                            <label for="name" class="formbold-form-label"> Image (Optional) </label>
+                            <input type="text" name="name" id="imageURL" placeholder="Enter the image's url..."
+                                class="tag-text-area" />
+                            <!-- Preview -->
+                            <label for="name" id="previewLbl" style="display:none" class="formbold-form-label"> Image Preview </label>
+                            <img id="imgPreview" src="">
+                        </div>
+
+
+
+                        <!-- Tag Content -->
+                        <div class="formbold-mb-5">
+                            <label for="name" class="formbold-form-label"> Tag Text & Emoji </label>
+                            <input type="text" name="name" id="tagText" placeholder="Enter the name of the tag..."
+                                class="tag-text-area" />
+                            <button id="emojiButton" class="emoji-button"
+                                onClick="emojiToggleHandler()">&#128512;</button>
+                            <emoji-picker class="emoji"></emoji-picker>
+                            <button class="formbold-btn" onclick="addTag()">Add Tag</button>
+                        </div>
+
+
+                        <!-- Tag List -->
+                        <div class="formbold-mb-5">
+                            <label for="name" class="formbold-form-label"> Tag List </label>
+                            <p id="tagError"></p>
+                            <ul id="tagList">
+
+                            </ul>
+                        </div>
+
+                        <!-- Create Post -->
+                        <div class="formbold-mb-5">
+                            <p id="createError"></p>
+                            <button id="createPost" class="formbold-btn" onclick="addPost()">Create Blog Post</button>
+                        </div>
+                    </div>
+
+
+                    <!-- Save New Posts -->
+                    <div id="saveBtn" style="display: none">
+                        <div class="formbold-mb-5">
+                            <label for="name" class="formbold-form-label"> Post Updates </label>
+                            <p class="update_counter ">Total Updates: <span id="postCount">0</span></p>
+                            <button id="downloadPosts" class="formbold-btn" onclick="updateData()">Save Blog
+                                Posts</button>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+</body>
+
+</html>
