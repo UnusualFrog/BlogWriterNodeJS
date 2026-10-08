@@ -23,12 +23,6 @@ let existingTagList = [];
 let existingPostsJSON;
 let postCounter = 0;
 
-// function loadData() {
-//   // Show upload prompt
-//   loadInput.click()
-
-// }
-
 // Auto-Load Data
 async function autoLoadData() {
   console.log("Loading data on startup...")
@@ -53,20 +47,16 @@ function saveData() {
 
   // Url for the request 
   let url = 'http://localhost:8080/data';
+  console.log("Here: ", existingPostsJSON);
 
   // Making our request 
-  fetch(url, { method: 'POST' })
-    .then(response => {
-      if (response.ok) {
-        console.log("Successful POST")
-      }
-      else {
-        console.log("failed to POST")
-      }
-    })
-    .catch(errorMsg => { console.log(errorMsg); });
+  fetch(url, {
+    method: 'POST', headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(existingPostsJSON),
+  }).catch(errorMsg => { console.log(errorMsg); });
 }
-
 
 // ##### POST CREATION FUNCTIONS #####
 
@@ -134,35 +124,6 @@ emojiPicker.addEventListener('emoji-click', event => {
   // Hide the emoji picker
   emojiPicker.classList.toggle("emoji");
 });
-
-// Get value of user loaded data JSON
-// loadInput.addEventListener('change', function (event) {
-
-//   // Get selected file
-//   const file = event.target.files[0];
-//   // Ensure file not empty
-//   if (file) {
-//     newPostArea.style.display = "block"
-//     saveBtnArea.style.display = "block"
-
-//     // Initialise file reader
-//     const reader = new FileReader();
-
-//     // Add onload event for reading file data
-//     reader.onload = function (e) {
-//       console.log(e.target.result)
-
-//       // Convert string data to JSON
-//       let data = JSON.parse(e.target.result)
-//       console.log(data)
-
-//       // Set global data variable to current data
-//       existingPostsJSON = data;
-//     };
-//     // Read file contents as plain text
-//     reader.readAsText(file);
-//   }
-// })
 
 // Control display of image preview
 imageURL.addEventListener('change', event => {
@@ -246,23 +207,6 @@ function updateData() {
   previewLbl.style.display = "none"
   imgPreview.src = ""
 }
-
-// Prompt user download of updated data
-// function download(file, text) {
-//   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(existingPostsJSON, null, 2));
-//   //creating an invisible element
-
-//   let element = document.createElement('a');
-//   element.setAttribute('href', dataStr);
-//   element.setAttribute('download', file);
-//   document.body.appendChild(element);
-//   element.click();
-
-//   document.body.removeChild(element);
-// }
-
-
-
 
 // ========== MAIN ==========
 
