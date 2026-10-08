@@ -1,3 +1,6 @@
+// const DATA_FILE_URL = "./blog_posts.json"
+const DATA_FILE_URL = "../Swamp-Paradise-Website/data/blog_posts.json"
+
 const fs = require('node:fs');
 var localJson;
 
@@ -14,14 +17,14 @@ app.use(express.static('www'));
 
 // Helper Functions
 function readLocalJSON() {
-    localJson = JSON.parse(fs.readFileSync('./blog_posts.json', 'utf8'));
+    localJson = JSON.parse(fs.readFileSync(DATA_FILE_URL, 'utf8'));
     console.log("Existing Data has been loaded")
 }
 
 function writeLocalJSON(body) {
     console.log("Writing to file:")
     // console.log(body)
-    fs.writeFileSync('./blog_posts.json', JSON.stringify(body));
+    fs.writeFileSync(DATA_FILE_URL, JSON.stringify(body));
 }
 
 // GET request to the data route will return existing Blog Post Data
