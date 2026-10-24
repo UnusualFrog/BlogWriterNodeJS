@@ -183,6 +183,7 @@
         .list-item:hover {
             color: #FF0000;
             border: 5px solid #FF0000;
+            text-decoration: line-through;
         }
 
         .tag-text-area {
